@@ -156,14 +156,46 @@ add('line',"M214 842L198 858l-10 2")                                            
 # spray mist drawn last so it sits on the bike
 add('mist',MIST); add('cone',CONE)
 
-# robot first (behind), then everything else
-LAYERS=LAYERS[:ROBOT_N]+LAYERS[ROBOT_N:]
-out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">'
-for kind,d in LAYERS:
-    if kind=='occ': out+=f'<path class="occ" stroke-width="1.6" d="{d}"/>'
-    elif kind=='line': out+=f'<path stroke-width="1.6" d="{d}"/>'
-    elif kind=='thin': out+=f'<path stroke-width="1" opacity=".6" d="{d}"/>'
-    elif kind=='cone': out+=f'<path stroke-width="1" stroke-dasharray="1 4" opacity=".6" d="{d}"/>'
-    elif kind=='mist': out+=f'<path stroke-width="2.2" opacity=".55" d="{d}"/>'
+# robot first (behind), then floor, then bike
+ROBOT=LAYERS[:ROBOT_N]
+REST=LAYERS[ROBOT_N:]
+# floor/platform kinds stay neutral; bike gets neon green
+# REST starts with floor then bike — split after spray mist was appended at end
+# Actually mist/cone are bike-adjacent spray; keep with bike. Floor is first few after ROBOT_N.
+# Count floor adds: line, occ, then thin loop — identify by regenerating with tags.
+# Simpler: mark floor layer range. Floor was added as: line, occ, thin*... before wheel().
+# ROBOT_N is end of robot. Floor: lines until wheel() starts — wheel is first bike geometry.
+# Re-tag: rebuild REST with explicit groups by re-running structure.
+# Easiest reliable approach: emit robot group red, then remaining paths neon green
+# EXCEPT floor paths which we leave as #111 / current black.
+# Floor paths are the first 3+ thin hatch adds after ROBOT_N before wheels.
+# From source: after ROBOT_N: line ground, occ platform, thin hatch loop (many), then wheels...
+# We'll tag floor by regenerating with kind prefixes.
+
+out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+def emit(kind,d,stroke=None):
+    global out
+    st=f' stroke="{stroke}"' if stroke else ''
+    if kind=='occ': out+=f'<path class="occ"{st} stroke-width="1.6" d="{d}"/>'
+    elif kind=='line': out+=f'<path{st} stroke-width="1.6" d="{d}"/>'
+    elif kind=='thin': out+=f'<path{st} stroke-width="1" opacity=".6" d="{d}"/>'
+    elif kind=='cone': out+=f'<path{st} stroke-width="1" stroke-dasharray="1 4" opacity=".6" d="{d}"/>'
+    elif kind=='mist': out+=f'<path{st} stroke-width="2.2" opacity=".55" d="{d}"/>'
+
+# floor: from ROBOT_N until first wheel circ — wheels use circ around RW/FW y=912 r=46
+# Count floor entries: 1 line + 1 occ + hatch thins. Hatch: for x in range(162,498,24) => 14 thins
+FLOOR_N = 2 + len(range(162,498,24))  # line+occ+hatches = 2+14=16
+FLOOR=REST[:FLOOR_N]
+BIKE=REST[FLOOR_N:]
+
+out+='<g stroke="#E60012">'  # Kawasaki red robot
+for kind,d in ROBOT: emit(kind,d)
+out+='</g>'
+out+='<g stroke="#161616">'  # neutral floor/frame
+for kind,d in FLOOR: emit(kind,d)
+out+='</g>'
+out+='<g stroke="#39FF14">'  # neon green motorcycle
+for kind,d in BIKE: emit(kind,d)
+out+='</g>'
 out+='</svg>'
-open('kawasaki4.svg','w').write(out); print(len(out))
+open('kawasaki4.svg','w').write(out); print(len(out), 'robot', len(ROBOT), 'floor', len(FLOOR), 'bike', len(BIKE))

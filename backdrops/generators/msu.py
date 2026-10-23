@@ -163,7 +163,7 @@ tree(92,G,150,[(96,770,82,70),(60,840,52,44),(140,850,50,40)])
 tree(410,G,160,[(404,760,76,72),(438,842,44,40),(368,858,46,38)])
 SHRUBS=[canopy(cx,G-14,30,16,9,.12) for cx in (196,304)]
 
-out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">'
+out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">'
 out+=f'<path stroke-width="1.6" d="{"".join(P)}"/><path stroke-width="1" opacity=".6" d="{"".join(F)}"/>'
 for T,shapes,tex in TREES:
     out+=f'<path stroke-width="1.6" d="{"".join(T)}"/>'

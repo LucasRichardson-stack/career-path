@@ -67,10 +67,11 @@ add('thin',"".join(circ(PX+sx*16,y,1.2) for sx in (-1,1) for y in (880,960)))
 add('occ',rrect(PX-28,866,56,8,2))
 def cap(c,r):
     """UR joint seen end-on: housing, dark seal ring, blue cap with 4 screws, centre logo boss"""
-    add('occ',circ(*c,r)); add('line',circ(*c,r*.86)); add('thin',circ(*c,r*.80))
+    # 'joint' strokes recolored light blue in the SVG emitter
+    add('joint_occ',circ(*c,r)); add('joint_line',circ(*c,r*.86)); add('joint_thin',circ(*c,r*.80))
     for k in range(4):
-        a=math.radians(45+k*90); add('thin',circ(c[0]+r*.6*math.cos(a),c[1]+r*.6*math.sin(a),.9))
-    add('thin',f"M{c[0]-r*.22:.1f} {c[1]+r*.2:.1f}Q{c[0]-r*.3:.1f} {c[1]-r*.3:.1f} {c[0]+r*.1:.1f} {c[1]-r*.28:.1f}")
+        a=math.radians(45+k*90); add('joint_thin',circ(c[0]+r*.6*math.cos(a),c[1]+r*.6*math.sin(a),.9))
+    add('joint_thin',f"M{c[0]-r*.22:.1f} {c[1]+r*.2:.1f}Q{c[0]-r*.3:.1f} {c[1]-r*.3:.1f} {c[0]+r*.1:.1f} {c[1]-r*.28:.1f}")
 def tube(a,b,r):
     ang=math.atan2(b[1]-a[1],b[0]-a[0]); nx,ny=-math.sin(ang)*r,math.cos(ang)*r
     return poly([(a[0]+nx,a[1]+ny),(b[0]+nx,b[1]+ny),(b[0]-nx,b[1]-ny),(a[0]-nx,a[1]-ny)])
@@ -133,11 +134,15 @@ add('occ',head)
 add('thin',"M118 723l10 1M108 721q-4 4 0 9M124 737h-3")                                                     # glasses, ear, mouth
 add('occ',smooth([(98,722),(102,710),(113,704),(124,707),(129,714),(119,714),(106,717)],t=.45))             # cap crown
 add('occ',smooth([(124,712),(142,719),(140,723),(126,718)],t=.2))                                            # brim
+JOINT='#7EC8E3'
 out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">'
 for kind,d in LAYERS:
     if not d: continue
     if kind=='occ': out+=f'<path class="occ" stroke-width="1.6" d="{d}"/>'
     elif kind=='line': out+=f'<path stroke-width="1.6" d="{d}"/>'
     elif kind=='thin': out+=f'<path stroke-width="1" opacity=".6" d="{d}"/>'
+    elif kind=='joint_occ': out+=f'<path class="occ" stroke="{JOINT}" stroke-width="1.6" d="{d}"/>'
+    elif kind=='joint_line': out+=f'<path stroke="{JOINT}" stroke-width="1.6" d="{d}"/>'
+    elif kind=='joint_thin': out+=f'<path stroke="{JOINT}" stroke-width="1" opacity=".75" d="{d}"/>'
 out+='</svg>'
 open('ur.svg','w').write(out); print(len(out),'grip',GX+32,GY,'chuck',CH)
