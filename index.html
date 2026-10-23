@@ -76,7 +76,26 @@
   .ph .org { font-family: var(--display); font-weight: 600; font-size: calc(var(--card-w) * .1); line-height: 1.05; color: #fff; text-transform: uppercase; letter-spacing: .03em; position: relative; }
   .ph .add { font-family: var(--mono); font-size: calc(var(--card-w) * .05); color: rgba(255,255,255,.55); position: relative; margin-top: 4px; }
   /* Logo card: the organization's mark on its own plate, until photos replace it */
-  .lc { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; background: var(--plate); color: var(--plate-ink); padding: 9% 9% 10%; }
+  .lc { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; background: var(--plate); color: var(--plate-ink); padding: 9% 9% 10%; overflow: hidden; }
+  /* Optional per-stop stencil: tinted with plate ink, kept very quiet behind the logo */
+  .lc.has-bg::before {
+    content: '';
+    position: absolute;
+    inset: -8% -18% -4% -8%;
+    background-color: var(--plate-ink);
+    opacity: .14;
+    -webkit-mask-image: var(--card-bg);
+    mask-image: var(--card-bg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: 55% 78%;
+    mask-position: 55% 78%;
+    -webkit-mask-size: 135% auto;
+    mask-size: 135% auto;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .lc.has-bg > * { position: relative; z-index: 1; }
   .lc .pt { font-family: var(--mono); font-size: calc(var(--card-w) * .062); letter-spacing: .08em; opacity: .65; }
   .lc .logo { position: relative; min-height: 0; overflow: hidden; }
   /* absolutely filled so the logo can never grow past its row and run under the name */
@@ -193,7 +212,7 @@ const THEMES = {"base": {"scheme": "dark", "bg": "#111418", "panel": "#181C22", 
 const LOGOS = {"liberty": "media/logos/liberty.png", "kawasaki": "media/logos/kawasaki.png", "ur": "media/logos/ur.png", "illinois": "media/logos/illinois.png", "apera": "media/logos/apera.png", "msu": "media/logos/msu.png", "peacecorps": "media/logos/peacecorps.png", "kettering": "media/logos/kettering.png"};
 
 const STOPS = [
-  { short: 'MSU', project: 'International law, Human and Criminal rights', theme: 'msu', logo: 'msu', plate: '#FFFFFF', plateInk: '#18453B',  mark: 'IR', org: 'Michigan State University', role: 'B.A., International Relations', years: '[2006 – 2010]', place: 'East Lansing, Michigan', kind: 'Education', photo: '', c1: '#2A6B5B', c2: '#123029',
+  { short: 'MSU', project: 'International law, Human and Criminal rights', theme: 'msu', logo: 'msu', plate: '#FFFFFF', plateInk: '#18453B', cardBg: 'media/backgrounds/msu-beaumont-tower.svg', mark: 'IR', org: 'Michigan State University', role: 'B.A., International Relations', years: '[2006 – 2010]', place: 'East Lansing, Michigan', kind: 'Education', photo: '', c1: '#2A6B5B', c2: '#123029',
     did: 'A desire to make a global impact, I wanted to be a diplomat in the Foreign Service.',
     lesson: 'Whether it is politics or business, taking culture and diverse experiences into account can drastically improve outcomes',
     skills: ['Research', 'Writing', 'Cross-cultural communication', 'Debate'] },
@@ -247,7 +266,7 @@ const cards = STOPS.map((s, i) => {
   b.setAttribute('aria-label', `${s.org}, ${s.role}`);
   b.innerHTML = `<div class="face" style="--c1:${s.c1};--c2:${s.c2}">${
     s.photo ? `<img src="${esc(s.photo)}" alt="" draggable="false">`
-    : s.logo ? `<div class="lc" style="--plate:${s.plate};--plate-ink:${s.plateInk}"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="logo"><img src="${LOGOS[s.logo]}" alt="" draggable="false"></span><span><span class="org">${esc(s.org)}</span><br><span class="yr">${esc(s.years)}</span></span></div>`
+    : s.logo ? `<div class="lc${s.cardBg ? ' has-bg' : ''}" style="--plate:${s.plate};--plate-ink:${s.plateInk}${s.cardBg ? `;--card-bg:url('${esc(s.cardBg)}')` : ''}"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="logo"><img src="${LOGOS[s.logo]}" alt="" draggable="false"></span><span><span class="org">${esc(s.org)}</span><br><span class="yr">${esc(s.years)}</span></span></div>`
             : `<div class="ph"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="mono">${esc(s.mark)}</span><span><span class="org">${esc(s.org)}</span><br><span class="add">photo goes here</span></span></div>`
   }</div>`;
   b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } go(i); });
