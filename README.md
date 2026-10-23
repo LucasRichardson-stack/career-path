@@ -2,7 +2,7 @@
 
 Presenter-friendly web page for Lucas Richardson’s guest talk to a robotics class at Kettering University. Eight career stops on a curved 3D carousel, each themed to the organization.
 
-**Live site:** [https://LucasRichardson-stack.github.io/career-path/](https://LucasRichardson-stack.github.io/career-path/)
+**Live site:** [https://lucasrichardson-stack.github.io/career-path/](https://lucasrichardson-stack.github.io/career-path/)
 
 ## Open locally
 
