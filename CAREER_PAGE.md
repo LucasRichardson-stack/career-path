@@ -170,13 +170,14 @@ Proposed design:
 - New optional `STOPS` field:
   ```js
   media: [
+    { type: 'youtube', id: 'uZw6w4DnSVA', caption: 'Liberty Reach — AI vision product demo' },
     { type: 'video', src: 'media/kawasaki-weld.mp4', poster: 'media/kawasaki-weld.jpg', caption: 'Spot welding cell, 2019' },
     { type: 'image', src: 'media/kawasaki-team.jpg', caption: 'Training class in Wixom' },
   ]
   ```
 - Stops with media show a small "Media" chip in the panel.
 - Clicking the chip or pressing Down opens a full-screen viewer in the stop's theme colors. Left and Right step through items, Esc or Up closes and returns to the carousel.
-- Videos: `preload="metadata"`, play when shown, pause when leaving. Sound is allowed because opening the viewer counts as a user interaction.
+- `youtube` items embed `https://www.youtube.com/embed/<id>`. Local videos: `preload="metadata"`, play when shown, pause when leaving. Sound is allowed because opening the viewer counts as a user interaction.
 - The clicker keeps moving between stops. Media is opened deliberately with the chip or the Down key.
 - Not a scroll-down section: scrolling pushes the carousel off screen in front of the room.
 - Optional: a `photo` on the card instead of the logo plate (field already supported).
