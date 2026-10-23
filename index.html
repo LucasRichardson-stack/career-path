@@ -54,21 +54,19 @@
     transition: opacity .9s ease;
   }
   .stop-bg.on { opacity: 1; }
-  .stop-bg::before {
-    content: '';
+  /* img (not mask) so stroke SVGs actually paint; invert → light lines on dark theme bg */
+  .stop-bg img {
     position: absolute;
-    inset: 0;
-    background-color: #fff;
-    opacity: .32;
-    -webkit-mask-image: var(--stop-bg-art);
-    mask-image: var(--stop-bg-art);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    /* Large watermark on the solid theme field, clear of the logo cards */
-    -webkit-mask-position: 78% 55%;
-    mask-position: 78% 55%;
-    -webkit-mask-size: min(72vh, 560px) auto;
-    mask-size: min(72vh, 560px) auto;
+    right: 2%;
+    top: 8%;
+    height: min(78vh, 620px);
+    width: auto;
+    max-width: 48vw;
+    object-fit: contain;
+    opacity: .3;
+    filter: brightness(0) invert(1);
+    user-select: none;
+    -webkit-user-drag: none;
   }
   .app { position: relative; z-index: 1; max-width: 1280px; height: 100%; margin: 0 auto; padding: 18px 16px; display: grid; grid-template-rows: auto minmax(260px, 1fr) auto auto auto; gap: 14px; box-sizing: border-box; }
 
@@ -186,7 +184,7 @@
 </style>
 
 <div class="scene" id="scene">
-  <div class="stop-bg" id="stop-bg" aria-hidden="true"></div>
+  <div class="stop-bg" id="stop-bg" aria-hidden="true"><img alt="" decoding="async"></div>
 <main class="app">
   <header class="top">
     <div class="who"><strong>Luke Richardson</strong><span>15 years in robotics and technical training, from the Peace Corps to AI vision</span></div>
@@ -367,12 +365,13 @@ function setActive(i, dir) {
   Object.entries(th).forEach(([k, v]) => k === 'scheme' ? (root.style.colorScheme = v) : root.style.setProperty('--' + k, v));
   // Per-stop page stencil on the scene background (not the logo card)
   const stopBg = $('stop-bg');
+  const stopBgImg = stopBg.querySelector('img');
   if (s.bgArt) {
-    stopBg.style.setProperty('--stop-bg-art', `url("${esc(s.bgArt)}")`);
+    stopBgImg.src = s.bgArt;
     stopBg.classList.add('on');
   } else {
     stopBg.classList.remove('on');
-    stopBg.style.removeProperty('--stop-bg-art');
+    stopBgImg.removeAttribute('src');
   }
   countEl.innerHTML = `<b>P[${i + 1}]</b> / P[${N}]`;
   cards.forEach((c, j) => c.classList.toggle('active', j === i));
