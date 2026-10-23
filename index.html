@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Luke Richardson Career Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Base world: a robot cell at night (graphite + safety amber). Each stop swaps in its organization's colours; registered properties let them cross-fade. */
+  @property --bg { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --panel { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --line { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --text { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --body { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --muted { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --accent { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --accent-text { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --on-accent { syntax: "<color>"; inherits: true; initial-value: #000; }
+  @property --eyebrow { syntax: "<color>"; inherits: true; initial-value: #000; }
+  :root {
+    color-scheme: dark;
+    --bg: #111418;
+    --panel: #181C22;
+    --panel-2: #1F242C;
+    --line: #2C333D;
+    --accent: #F2B33D;
+    --accent-text: #F2B33D;
+    --on-accent: #111418;
+    --eyebrow: #86A8BE;
+    --text: #F0F2F4;
+    --body: #C3C9D0;
+    --muted: #8A929C;
+    --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+    --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  html, body { height: 100%; background: var(--bg); color: var(--body); }
+  html { transition: --bg .9s ease, --panel .9s ease, --line .9s ease, --text .9s ease, --body .9s ease, --muted .9s ease, --accent .9s ease, --accent-text .9s ease, --on-accent .9s ease, --eyebrow .9s ease; }
+  body { font-family: var(--sans); font-size: 16px; line-height: 1.5; padding-inline: 16px; }
+  .app { max-width: 1280px; height: 100%; margin: 0 auto; padding-block: 18px; display: grid; grid-template-rows: auto minmax(260px, 1fr) auto auto auto; gap: 14px; }
+
+  /* Header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .who { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .who strong { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: .04em; text-transform: uppercase; color: var(--text); }
+  .who span { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+  .top-right { display: flex; align-items: center; gap: 14px; }
+  .count { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .count b { color: var(--accent-text); font-weight: 500; }
+  .fs { font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+  .fs:hover { border-color: var(--accent); color: var(--accent); }
+  .fs:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Carousel */
+  .stage { position: relative; min-height: 0; overflow: hidden; perspective: var(--persp, 700px); touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+  .stage.dragging { cursor: grabbing; }
+  .stage::before, .stage::after { content: ""; position: absolute; top: 0; bottom: 0; width: 10%; z-index: 2; pointer-events: none; }
+  .stage::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .stage::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+  .ring { position: absolute; inset: 0; z-index: 1; transform-style: preserve-3d; }
+  .card { position: absolute; left: 50%; top: 50%; width: var(--card-w, 170px); aspect-ratio: 2 / 3; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; transform-style: preserve-3d; backface-visibility: hidden; will-change: transform; }
+  /* Focus is shown on the card face itself and always follows the current stop, so no ring is left behind */
+  .card:focus { outline: none; }
+  .card:focus-visible .face { box-shadow: 0 0 0 3px var(--accent), 0 22px 50px rgba(0,0,0,.4); }
+  .face { position: absolute; inset: 0; border-radius: 4px; overflow: hidden; background: var(--c1, #22303C); box-shadow: inset 0 0 0 1px rgba(128,128,128,.28), 0 18px 40px rgba(0,0,0,.35); }
+  .face img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  /* Photo placeholder: tinted panel, big monogram, dashed photo frame */
+  .ph { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 9% 9% 10%; background: linear-gradient(160deg, var(--c1) 0%, var(--c2) 100%); }
+  .ph::before { content: ""; position: absolute; inset: 6%; border: 1.5px dashed rgba(255,255,255,.22); border-radius: 3px; pointer-events: none; }
+  .ph .pt { font-family: var(--mono); font-size: calc(var(--card-w) * .062); letter-spacing: .08em; color: rgba(255,255,255,.7); position: relative; }
+  .ph .mono { font-family: var(--display); font-weight: 800; font-size: calc(var(--card-w) * .42); line-height: .9; color: rgba(255,255,255,.92); position: relative; letter-spacing: .01em; }
+  .ph .org { font-family: var(--display); font-weight: 600; font-size: calc(var(--card-w) * .1); line-height: 1.05; color: #fff; text-transform: uppercase; letter-spacing: .03em; position: relative; }
+  .ph .add { font-family: var(--mono); font-size: calc(var(--card-w) * .05); color: rgba(255,255,255,.55); position: relative; margin-top: 4px; }
+  /* Logo card: the organization's mark on its own plate, until photos replace it */
+  .lc { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; background: var(--plate); color: var(--plate-ink); padding: 9% 9% 10%; }
+  .lc .pt { font-family: var(--mono); font-size: calc(var(--card-w) * .062); letter-spacing: .08em; opacity: .65; }
+  .lc .logo { position: relative; min-height: 0; overflow: hidden; }
+  /* absolutely filled so the logo can never grow past its row and run under the name */
+  .lc .logo img { position: absolute; inset: 8% 4%; width: 92%; height: 84%; object-fit: contain; pointer-events: none; }
+  .lc .org { font-family: var(--display); font-weight: 600; font-size: calc(var(--card-w) * .1); line-height: 1.05; text-transform: uppercase; letter-spacing: .03em; }
+  .lc .yr { font-family: var(--mono); font-size: calc(var(--card-w) * .05); opacity: .6; margin-top: 3px; }
+  .card.active .face { box-shadow: 0 0 0 2px var(--accent), 0 22px 50px rgba(0,0,0,.4); }
+
+  /* Waypoint path (the robot-program view of the career) */
+  .path { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+  .arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-size: 18px; cursor: pointer; display: grid; place-items: center; transition: border-color .2s, color .2s, opacity .2s; }
+  .arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .arrow:disabled { opacity: .3; cursor: default; }
+  .arrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  /* Waypoints ride under their cards: positions are projected from the same cylinder each frame */
+  .steps { position: relative; height: 64px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+  .steps::before { content: ""; position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--line); }
+  .steps .fill { position: absolute; left: 0; top: 11px; height: 2px; background: var(--accent); width: 0; }
+  .step { position: absolute; top: 0; left: 0; width: 150px; margin-left: -75px; will-change: transform; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 4px; border: 0; background: none; color: var(--muted); font: inherit; cursor: pointer; }
+  .step .node { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 10px; color: var(--muted); transition: border-color .3s, background .3s, color .3s; position: relative; z-index: 1; }
+  .step .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-align: center; line-height: 1.3; max-width: 16ch; }
+  .step.done .node { border-color: var(--accent); color: var(--accent-text); }
+  .step[aria-current="true"] .node { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .step[aria-current="true"] .lbl { color: var(--text); }
+  .step:hover .lbl { color: var(--text); }
+  .step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  /* Info panel */
+  .info { position: relative; overflow: hidden; min-height: 300px; }
+  .panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 16px 48px; align-items: start; }
+  .panel.anim-in { animation: slideIn .55s cubic-bezier(.2,.7,.2,1) both; }
+  .panel.anim-out { position: absolute; inset: 0 0 auto 0; animation: slideOut .4s cubic-bezier(.5,0,.8,.4) both; }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 60px)); } to { opacity: 1; transform: none; } }
+  @keyframes slideOut { to { opacity: 0; transform: translateX(calc(var(--dir, 1) * -60px)); } }
+  .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--eyebrow); letter-spacing: .06em; margin-bottom: 6px; }
+  .panel h1 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 5vw, 64px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; color: var(--text); margin: 0 0 8px; text-wrap: balance; }
+  .role { font-size: 19px; font-weight: 500; color: var(--accent-text); margin: 0; }
+  .meta { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .fav { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; max-width: 46ch; }
+  .fav-k { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--eyebrow); }
+  .fav-v { font-size: 17px; font-weight: 500; color: var(--text); line-height: 1.35; }
+  .right { display: flex; flex-direction: column; gap: 14px; }
+  .right p { margin: 0; max-width: 64ch; font-size: 16.5px; }
+  .lesson { border-left: 0; background: var(--panel); border-radius: 4px; padding: 12px 14px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; }
+  .lesson dt { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--eyebrow); grid-column: 1 / -1; }
+  .lesson dd { margin: 0; color: var(--text); grid-column: 1 / -1; font-size: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-family: var(--mono); font-size: 11.5px; color: var(--body); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+  .todo { color: var(--muted); font-style: italic; }
+  .advice { margin: 0; padding: 0; list-style: none; counter-reset: adv; display: flex; flex-direction: column; gap: 10px; max-width: 64ch; }
+  .advice li { counter-increment: adv; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; font-size: 16px; line-height: 1.45; color: var(--body); }
+  .advice li::before { content: counter(adv); font-family: var(--mono); font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); margin-top: 1px; }
+
+  .hint { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
+  kbd { font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; color: var(--body); }
+
+  @media (max-width: 760px) {
+    html, body { height: auto; }
+    .app { height: auto; grid-template-rows: auto 360px auto auto auto; }
+    .panel { grid-template-columns: 1fr; }
+    .info { min-height: 440px; }
+    .step .lbl { display: none; }
+    .fs { display: none; }
+  }
+  @media (max-height: 760px) and (min-width: 761px) {
+    .panel h1 { font-size: clamp(30px, 4vw, 48px); }
+    .right p { font-size: 15px; }
+    .info { min-height: 290px; }
+    .fav { margin-top: 12px; }
+    .fav-v { font-size: 15.5px; }
+    .advice li { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { transition: none; }
+    .panel.anim-in, .panel.anim-out { animation: none; }
+    .panel.anim-out { display: none; }
+  }
+</style>
+
+<main class="app">
+  <header class="top">
+    <div class="who"><strong>Luke Richardson</strong><span>15 years in robotics and technical training, from the Peace Corps to AI vision</span></div>
+    <div class="top-right">
+      <span class="count" id="count"></span>
+      <button class="fs" id="fs" type="button">Full screen</button>
+    </div>
+  </header>
+
+  <section class="stage" id="stage" aria-label="Career stops">
+    <div class="ring" id="ring"></div>
+  </section>
+
+  <nav class="path" aria-label="Career path">
+    <button class="arrow" id="prev" type="button" aria-label="Previous stop">&#8592;</button>
+    <div class="steps" id="steps"><span class="fill" id="fill"></span></div>
+    <button class="arrow" id="next" type="button" aria-label="Next stop">&#8594;</button>
+  </nav>
+
+  <section class="info" id="info" aria-live="polite"></section>
+
+  <div class="hint">Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> or a presentation clicker, or select any card or waypoint</div>
+</main>
+
+<script>
+/* =====================================================================
+   EDIT YOUR CAREER HERE. One object per stop, in chronological order.
+   - Anything in [square brackets] is a placeholder to replace.
+   - photo: leave '' for the placeholder card, or paste an image URL /
+     data: URI later. Portrait (2:3) photos look best.
+   - mark: 1–3 letters shown big on the placeholder card.
+   - c1 / c2: the placeholder card's two gradient colours.
+   ===================================================================== */
+const THEMES = {"base": {"scheme": "dark", "bg": "#111418", "panel": "#181C22", "line": "#2C333D", "text": "#F0F2F4", "body": "#C3C9D0", "muted": "#8A929C", "accent": "#F2B33D", "accent-text": "#F2B33D", "on-accent": "#111418", "eyebrow": "#86A8BE"}, "msu": {"scheme": "dark", "bg": "#18453B", "panel": "#1F5246", "line": "#33695B", "text": "#FFFFFF", "body": "#DCE8E3", "muted": "#A6C2B8", "accent": "#FFFFFF", "accent-text": "#FFFFFF", "on-accent": "#18453B", "eyebrow": "#9FD3BF"}, "liberty": {"scheme": "dark", "bg": "#0A0C0B", "panel": "#141916", "line": "#26302A", "text": "#F2F5F3", "body": "#C6CEC9", "muted": "#8B978F", "accent": "#3DB54A", "accent-text": "#5CCB68", "on-accent": "#0A0C0B", "eyebrow": "#5CCB68"}, "kawasaki": {"scheme": "light", "bg": "#FFFFFF", "panel": "#F3F3F3", "line": "#DDDDDD", "text": "#161616", "body": "#3B3B3B", "muted": "#6F6F6F", "accent": "#E60012", "accent-text": "#D10010", "on-accent": "#FFFFFF", "eyebrow": "#B5000E"}, "ur": {"scheme": "light", "bg": "#F5FAFE", "panel": "#E5F0F9", "line": "#C7DCEE", "text": "#0F2A3D", "body": "#2F4A5E", "muted": "#5D7689", "accent": "#56A2D6", "accent-text": "#2A78B1", "on-accent": "#FFFFFF", "eyebrow": "#2A78B1"}, "illinois": {"scheme": "dark", "bg": "#13294B", "panel": "#1B3560", "line": "#2C4875", "text": "#FFFFFF", "body": "#D6DEEA", "muted": "#A0B1C9", "accent": "#E84A27", "accent-text": "#FF7552", "on-accent": "#FFFFFF", "eyebrow": "#FF9A80"}, "apera": {"scheme": "light", "bg": "#FFFFFF", "panel": "#F1F4F5", "line": "#D7DEE2", "text": "#15191C", "body": "#3C464D", "muted": "#6B767E", "accent": "#F32735", "accent-text": "#D0212C", "on-accent": "#FFFFFF", "eyebrow": "#D0212C"}, "peacecorps": {"scheme": "dark", "bg": "#062F60", "panel": "#0D3B72", "line": "#24528C", "text": "#FFFFFF", "body": "#D8E2F0", "muted": "#A2B6D2", "accent": "#D63549", "accent-text": "#FF7385", "on-accent": "#FFFFFF", "eyebrow": "#B9CDEA"}, "kettering": {"scheme": "dark", "bg": "#173A78", "panel": "#1F4A92", "line": "#3460A6", "text": "#FFFFFF", "body": "#DCE6F7", "muted": "#A9BEE3", "accent": "#FFD100", "accent-text": "#FFD84D", "on-accent": "#173A78", "eyebrow": "#FFD84D"}};
+const LOGOS = {"liberty": "media/logos/liberty.png", "kawasaki": "media/logos/kawasaki.png", "ur": "media/logos/ur.png", "illinois": "media/logos/illinois.png", "apera": "media/logos/apera.png", "msu": "media/logos/msu.png", "peacecorps": "media/logos/peacecorps.png", "kettering": "media/logos/kettering.png"};
+
+const STOPS = [
+  { short: 'MSU', project: 'International law, Human and Criminal rights', theme: 'msu', logo: 'msu', plate: '#FFFFFF', plateInk: '#18453B',  mark: 'IR', org: 'Michigan State University', role: 'B.A., International Relations', years: '[2006 – 2010]', place: 'East Lansing, Michigan', kind: 'Education', photo: '', c1: '#2A6B5B', c2: '#123029',
+    did: 'A desire to make a global impact, I wanted to be a diplomat in the Foreign Service.',
+    lesson: 'Whether it is politics or business, taking culture and diverse experiences into account can drastically improve outcomes',
+    skills: ['Research', 'Writing', 'Cross-cultural communication', 'Debate'] },
+  { short: 'Peace Corps', project: 'Micro loans for a women’s crisis center', theme: 'peacecorps', logo: 'peacecorps', plate: '#FFFFFF', plateInk: '#053C79',  mark: 'PC', org: 'U.S. Peace Corps', role: 'TEFL Instructor and Teacher Trainer', years: 'Mar 2011 – Jul 2013', place: 'Kyrgyzstan', kind: 'Service', photo: '', c1: '#3E5A3A', c2: '#1A2618',
+    did: 'Two and a half years in Kyrgyzstan teaching English as a foreign language and training local teachers.',
+    lesson: 'Patience and the ability to translate complex or difficult ideas to audiences that have trouble understanding.',
+    skills: ['Teaching', 'Teacher training', 'Adaptability', 'Kyrgyz Language', ] },
+  { short: 'Liberty Robotics', project: 'Five-month international project at Daihatsu Motors in Nagaokakyo, Japan', theme: 'liberty', logo: 'liberty', plate: '#FFFFFF', plateInk: '#111111',  mark: 'LR', org: 'Liberty Robotics', role: 'Training & Project Manager, AI Vision', years: 'Sep 2013 – Mar 2016', place: 'Ann Arbor, Michigan', kind: 'Industry', photo: '', c1: '#2F4F66', c2: '#121E28',
+    did: 'My first job in robotics. I managed AI vision projects for Daihatsu and Ford’s Ohio Truck Plant, worth more than $2M combined, led four applications engineers and a training engineer, and ran new-hire and customer training.',
+    lesson: 'Quality training can lessen anxiety and improve commercial outcomes.',
+    skills: ['Robot vision', 'Project management', 'Customer training', 'Documentation'] },
+  { short: 'Kawasaki', project: 'Converting the training catalog to an online format during the pandemic', theme: 'kawasaki', logo: 'kawasaki', plate: '#FFFFFF', plateInk: '#111111',  mark: 'KR', org: 'Kawasaki Robotics', role: 'Senior Trainer & Developer', years: 'Mar 2016 – Apr 2022', place: 'Wixom, Michigan', kind: 'Industry', photo: '', c1: '#5A4632', c2: '#241B12',
+    did: 'Six years designing and teaching robot programming, simulation, and safety for major automotive customers.',
+    lesson: 'Know your worth. Figure out what you can and will not put up with. No one will be a bigger advocate for you than yourself.',
+    skills: ['Robot programming', 'Simulation', 'ISO', 'Remote training'] },
+  { short: 'Universal Robots', project: 'Building the training center in Boston', theme: 'ur', logo: 'ur', plate: '#FFFFFF', plateInk: '#0F2A3D',  mark: 'UR', org: 'Universal Robots', role: 'Regional Training Manager, North America', years: 'Apr 2022 – Oct 2025', place: 'Remote; Global; Novi, Michigan', kind: 'Industry', photo: '', c1: '#2F5560', c2: '#122328',
+    did: 'Ran the training program in the USA and Canada. Managed American training assets, budgets, and authorized training distribution partners. Supported the commercial sales into educational institutions and certified authorized teachers and trainers.',
+    lesson: 'The value of cultivating relationships and networking across departments and organizations.',
+    skills: ['Team leadership', 'Certification programs', 'Educator programs', 'Power BI & RStudio'] },
+  { short: 'M.S.', project: 'Brazil Immersion; Building a 1 year timeline for a local design firm to enter the US and UK markets.', theme: 'illinois', logo: 'illinois', plate: '#12294B', plateInk: '#FFFFFF',  mark: 'MS', org: 'University of Illinois Urbana-Champaign', heading: 'University of Illinois', role: 'M.S., Management', years: '[2023 – 2025]', place: 'Urbana-Champaign · [Online]', kind: 'Education', photo: '', c1: '#4A3458', c2: '#1E1526',
+    did: 'Initially I signed up for an MBA, but pivoted after 2 years due to layoffs at UR and increased workload and concerns for job stability.',
+    lesson: 'A better understanding of Data analysis and how it can be utilized to gain resources, buy-in, and support.',
+    skills: ['Operations', 'Strategy', 'Leading teams', 'Data Analytics'] },
+  { short: 'Apera AI', project: 'Building eLearning and interactive tutorial videos', theme: 'apera', logo: 'apera', plate: '#FFFFFF', plateInk: '#15191C',  mark: 'AI', org: 'Apera AI', role: 'Sr. Manager, Training and Learning Operations', years: 'Oct 2025 – present', place: 'Farmington Hills, Michigan', kind: 'Industry', photo: '', c1: '#6A2A2E', c2: '#2A1214',
+    did: 'I built Apera’s training function from scratch: onboarding, hands-on labs, documentation, and instructor-led courses for engineers, customers, and integrators.',
+    lesson: 'Biggest take-away was getting to deep dive into AI assisted development and tools to decrease development time',
+    skills: ['AI vision', 'Building a team', 'Onboarding', 'AI-assisted tools'] },
+  // did can be a list: each item shows on its own numbered line
+  { short: 'Your turn', theme: 'kettering', logo: 'kettering', plate: '#FFFFFF', plateInk: '#1D4F9C',  mark: '?', org: 'Kettering University', role: 'Questions', years: 'Today', place: 'Flint, Michigan', kind: 'Q&A', photo: '', c1: '#7A5A1A', c2: '#2C200A',
+    did: [
+      'Know your worth, but be able to support it with data.',
+      'You do not have to be passionate about your industry, but find things within your role that you enjoy.',
+      'Networking and relationship building, frustratingly, is often a huge component in whether you can move within a company and/or find new roles outside of it.',
+    ],
+    lesson: 'Careers in robotics are not only for engineers. Trainers, project managers, operators, and integrators all keep these systems running.',
+    skills: ['Q&A'] },
+];
+
+const N = STOPS.length;
+const $ = id => document.getElementById(id);
+const stage = $('stage'), ring = $('ring'), info = $('info'), stepsEl = $('steps'), fill = $('fill'), countEl = $('count');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ph = s => esc(s).replace(/\[([^\]]+)\]/g, '<span class="todo">[$1]</span>');
+
+// ---------- build cards ----------
+let dragMoved = false;
+const cards = STOPS.map((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'card'; b.type = 'button';
+  b.setAttribute('aria-label', `${s.org}, ${s.role}`);
+  b.innerHTML = `<div class="face" style="--c1:${s.c1};--c2:${s.c2}">${
+    s.photo ? `<img src="${esc(s.photo)}" alt="" draggable="false">`
+    : s.logo ? `<div class="lc" style="--plate:${s.plate};--plate-ink:${s.plateInk}"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="logo"><img src="${LOGOS[s.logo]}" alt="" draggable="false"></span><span><span class="org">${esc(s.org)}</span><br><span class="yr">${esc(s.years)}</span></span></div>`
+            : `<div class="ph"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="mono">${esc(s.mark)}</span><span><span class="org">${esc(s.org)}</span><br><span class="add">photo goes here</span></span></div>`
+  }</div>`;
+  b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } go(i); });
+  ring.appendChild(b); return b;
+});
+
+// ---------- waypoint path ----------
+const steps = STOPS.map((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'step'; b.type = 'button';
+  b.setAttribute('aria-label', `Stop ${i + 1}: ${s.org}`);
+  b.innerHTML = `<span class="node">${i + 1}</span><span class="lbl">${ph(s.short)}</span>`;
+  b.addEventListener('click', () => go(i));
+  stepsEl.appendChild(b); return b;
+});
+
+// ---------- geometry: cards on the inside of a cylinder ----------
+let cardW = 170, R = 750, step = .25;
+let stepOrigin = 0;
+// screen x of a card d slots from the centre, using the stage's own perspective
+function project(d) {
+  const th = d * step, P = R * 1.18;
+  return R * Math.sin(th) * P / (P - R * (1 - Math.cos(th)));
+}
+function measure() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  cardW = Math.max(110, Math.min(230, w * (w < 760 ? .32 : .14), (h / 1.5) / 1.15));
+  R = cardW * 5.6;
+  step = (cardW * 1.12) / R;
+  stage.style.setProperty('--card-w', cardW + 'px');
+  ring.style.setProperty('--card-w', cardW + 'px');
+  stage.style.setProperty('--persp', (R * 1.18) + 'px');
+  const sr = stage.getBoundingClientRect(), pr = stepsEl.getBoundingClientRect();
+  stepOrigin = sr.left + sr.width / 2 - pr.left;
+  render();
+}
+
+// pos = continuous index at the centre. The path has a start and an end, so it doesn't loop.
+let pos = 0, aFrom = 0, aTo = 0, aStart = 0, aDur = 0, raf = 0;
+function render() {
+  cards.forEach((c, i) => {
+    const d = i - pos, ad = Math.abs(d);
+    const a = -d * step;
+    const op = ad > 3.2 ? Math.max(0, 1 - (ad - 3.2) / .5) : 1;
+    c.style.transform = `translate(-50%, -50%) translateZ(${R}px) rotateY(${a}rad) translateZ(${-R}px)`;
+    c.style.opacity = op;
+    c.style.visibility = op <= 0 ? 'hidden' : 'visible';
+    c.style.zIndex = String(100 - Math.round(ad * 10));
+    c.style.filter = `brightness(${1 - Math.min(ad, 3) * .13})`;
+    c.tabIndex = ad < .5 ? 0 : -1;
+    steps[i].style.transform = `translateX(${(stepOrigin + project(d)).toFixed(1)}px)`;
+    steps[i].style.opacity = op;
+  });
+  // amber fill runs from the first stop to the centre (the current position)
+  const left = Math.max(0, stepOrigin + project(-pos));
+  fill.style.left = left + 'px';
+  fill.style.width = Math.max(0, stepOrigin - left) + 'px';
+}
+const ease = t => 1 - Math.pow(1 - t, 3);
+function tick(now) {
+  const t = Math.min(1, (now - aStart) / aDur);
+  pos = aFrom + (aTo - aFrom) * ease(t); render();
+  if (t < 1) raf = requestAnimationFrame(tick); else { pos = aTo; raf = 0; }
+}
+function animateTo(target) {
+  cancelAnimationFrame(raf);
+  aFrom = pos; aTo = target;
+  const dist = Math.abs(target - pos);
+  if (reduce || dist < .001) { pos = target; render(); return; }
+  aDur = 560 + 160 * Math.min(dist, 4);
+  aStart = performance.now(); raf = requestAnimationFrame(tick);
+}
+
+// ---------- state ----------
+let active = -1;
+function go(i) {
+  i = Math.max(0, Math.min(N - 1, i));
+  animateTo(i);
+  if (i !== active) setActive(i, i > active ? 1 : -1);
+}
+function setActive(i, dir) {
+  const first = active === -1; active = i;
+  const s = STOPS[i];
+  const th = THEMES[s.theme] || THEMES.base, root = document.documentElement;
+  Object.entries(th).forEach(([k, v]) => k === 'scheme' ? (root.style.colorScheme = v) : root.style.setProperty('--' + k, v));
+  countEl.innerHTML = `<b>P[${i + 1}]</b> / P[${N}]`;
+  cards.forEach((c, j) => c.classList.toggle('active', j === i));
+  // if a card had focus (e.g. it was clicked), hand focus to the new current card
+  if (document.activeElement && document.activeElement.classList.contains('card')) cards[i].focus({ preventScroll: true });
+  steps.forEach((st, j) => { st.setAttribute('aria-current', j === i); st.classList.toggle('done', j < i); });
+  $('prev').disabled = i === 0; $('next').disabled = i === N - 1;
+
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  panel.innerHTML = `
+    <div>
+      <div class="eyebrow">${ph(s.years)} · ${esc(s.kind)}</div>
+      <h1>${ph(s.heading || s.org)}</h1>
+      <p class="role">${ph(s.role)}</p>
+      <div class="meta">${ph(s.place)}</div>
+      ${s.project ? `<div class="fav"><span class="fav-k">Favorite project</span><span class="fav-v">${ph(s.project)}</span></div>` : ''}
+    </div>
+    <div class="right">
+      ${Array.isArray(s.did) ? `<ol class="advice">${s.did.map(t => `<li>${ph(t)}</li>`).join('')}</ol>` : `<p>${ph(s.did)}</p>`}
+      <dl class="lesson"><dt>What it taught me</dt><dd>${ph(s.lesson)}</dd></dl>
+      <div class="chips">${s.skills.map(k => `<span class="chip">${ph(k)}</span>`).join('')}</div>
+    </div>`;
+  info.style.setProperty('--dir', dir);
+  info.querySelectorAll('.panel.anim-out').forEach(p => p.remove());
+  const old = info.querySelector('.panel');
+  if (old && !first) {
+    old.classList.add('anim-out');
+    old.addEventListener('animationend', () => old.remove(), { once: true });
+    if (reduce) old.remove();
+    panel.classList.add('anim-in');
+  }
+  info.appendChild(panel);
+  requestAnimationFrame(measure);
+}
+
+// ---------- controls ----------
+$('prev').addEventListener('click', () => go(active - 1));
+$('next').addEventListener('click', () => go(active + 1));
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input, textarea')) return;
+  const fwd = ['ArrowRight', 'PageDown', ' '], back = ['ArrowLeft', 'PageUp'];
+  if (fwd.includes(e.key)) { e.preventDefault(); go(active + 1); }
+  else if (back.includes(e.key)) { e.preventDefault(); go(active - 1); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(N - 1);
+});
+$('fs').addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch (_) { $('fs').textContent = 'Full screen unavailable'; $('fs').disabled = true; }
+});
+document.addEventListener('fullscreenchange', () => { $('fs').textContent = document.fullscreenElement ? 'Exit full screen' : 'Full screen'; });
+
+// drag / swipe, with resistance past either end
+let dragging = false, dx0 = 0, p0 = 0;
+stage.addEventListener('pointerdown', e => { dragging = true; dragMoved = false; dx0 = e.clientX; p0 = pos; cancelAnimationFrame(raf); raf = 0; });
+addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - dx0;
+  if (Math.abs(dx) > 6 && !dragMoved) { dragMoved = true; stage.classList.add('dragging'); }
+  if (!dragMoved) return;
+  let p = p0 - dx / (cardW * 1.25);
+  if (p < 0) p = p * .3; if (p > N - 1) p = N - 1 + (p - N + 1) * .3;
+  pos = p; render();
+});
+addEventListener('pointerup', e => {
+  if (!dragging) return;
+  dragging = false; stage.classList.remove('dragging');
+  if (!dragMoved) return;
+  const dx = e.clientX - dx0;
+  const t = Math.max(0, Math.min(N - 1, Math.round(pos - Math.sign(dx) * .2)));
+  animateTo(t);
+  if (t !== active) setActive(t, t > active ? 1 : -1);
+  setTimeout(() => { dragMoved = false; }, 0);
+});
+
+addEventListener('resize', measure);
+measure();
+setActive(0, 1);
+</script>
+
+</body>
+</html>
