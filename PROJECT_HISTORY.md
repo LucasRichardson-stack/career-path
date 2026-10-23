@@ -64,6 +64,21 @@ Fixes made along the way:
 - The MSU name overlapped the Sparty logo. Logos are now locked to their own area.
 - A taller text panel squeezed the carousel. The panel now has a fixed height.
 
+## Phase 5: Background line drawings
+
+The plain backgrounds felt bland, so each stop got a subtle line drawing in the page background, fixed in place so it won't scroll with the content later:
+
+- **MSU:** Beaumont Tower, redrawn from a reference photo after the first attempt didn't read as the tower (added the clock, the Sower relief, and trees that sit in front of the tower instead of showing lines through it).
+- **Peace Corps:** a Kyrgyz yurt with poplars and mountains. The Shepard Fairey Peace Corps poster was the inspiration, but tracing it would have copied his artwork, so the scene is original and tied to where I served.
+- **Liberty Robotics:** a car body on a line under overhead cameras. Dotted sight lines and bold "scanned" strips show what the cameras see, instead of solid light beams.
+- **Kawasaki:** a BX-style robot and a Ninja-style sport bike. Took three rounds; the robot shapes ended up based on the BX product photo.
+- **Universal Robots:** a UR cobot loading a CNC lathe with an operator right beside it, no fence, to show the collaborative angle.
+- **Illinois:** Altgeld Hall.
+- **Apera AI:** an Apera Vue camera over a bin of random parts, with the chosen part marked and a robot picking it.
+- **Kettering:** the original General Motors Institute entrance.
+
+Light-theme stops use black lines; dark-theme stops use the theme's accent color, because black disappears on navy and near-black. Opacity was tuned per stop (35–45%).
+
 ## Where it's going
 
 Moving the project to Cursor and GitHub, for three reasons:
