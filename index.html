@@ -59,15 +59,16 @@
     position: absolute;
     inset: 0;
     background-color: #fff;
-    opacity: .28;
+    opacity: .32;
     -webkit-mask-image: var(--stop-bg-art);
     mask-image: var(--stop-bg-art);
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    -webkit-mask-position: 92% 38%;
-    mask-position: 92% 38%;
-    -webkit-mask-size: min(58vh, 460px) auto;
-    mask-size: min(58vh, 460px) auto;
+    /* Large watermark on the solid theme field, clear of the logo cards */
+    -webkit-mask-position: 78% 55%;
+    mask-position: 78% 55%;
+    -webkit-mask-size: min(72vh, 560px) auto;
+    mask-size: min(72vh, 560px) auto;
   }
   .app { position: relative; z-index: 1; max-width: 1280px; height: 100%; margin: 0 auto; padding: 18px 16px; display: grid; grid-template-rows: auto minmax(260px, 1fr) auto auto auto; gap: 14px; box-sizing: border-box; }
 
