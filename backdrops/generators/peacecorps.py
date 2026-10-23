@@ -87,7 +87,7 @@ for x in range(14,490,22):
 # path to the door
 path(f"M{cx-20} {G}Q{cx-30} {G+10} {cx-60} {G+18}M{cx+20} {G}Q{cx+30} {G+10} {cx+70} {G+18}",True)
 
-out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#CE1126" stroke-linecap="round" stroke-linejoin="round">'
+out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">'
 out+=f'<path stroke-width="1.6" d="{"".join(P)}"/><path stroke-width="1" opacity=".6" d="{"".join(F)}"/>'
 for d,det,bold in OCC:
     out+=f'<path class="occ" stroke-width="1.6" d="{d}"/>'

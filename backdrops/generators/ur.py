@@ -134,7 +134,7 @@ add('occ',head)
 add('thin',"M118 723l10 1M108 721q-4 4 0 9M124 737h-3")                                                     # glasses, ear, mouth
 add('occ',smooth([(98,722),(102,710),(113,704),(124,707),(129,714),(119,714),(106,717)],t=.45))             # cap crown
 add('occ',smooth([(124,712),(142,719),(140,723),(126,718)],t=.2))                                            # brim
-JOINT='#7EC8E3'
+JOINT='#1F6AA5'
 out='<svg viewBox="0 30 500 960" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">'
 for kind,d in LAYERS:
     if not d: continue

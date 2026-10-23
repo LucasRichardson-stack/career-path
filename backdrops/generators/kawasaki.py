@@ -194,7 +194,7 @@ out+='</g>'
 out+='<g stroke="#161616">'  # neutral floor/frame
 for kind,d in FLOOR: emit(kind,d)
 out+='</g>'
-out+='<g stroke="#39FF14">'  # neon green motorcycle
+out+='<g stroke="#1B8A3E">'  # neon green motorcycle
 for kind,d in BIKE: emit(kind,d)
 out+='</g>'
 out+='</svg>'
