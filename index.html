@@ -213,7 +213,7 @@
   <section class="info" id="info" aria-live="polite"></section>
 
   <div class="hint">Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> or a presentation clicker, or select any card or waypoint</div>
-  <div class="scroll-cue" id="scroll-cue" hidden>Scroll down for video</div>
+  <div class="scroll-cue" id="scroll-cue" hidden>Scroll down for media</div>
   <section class="media-rail" id="media-rail" hidden aria-label="Stop media"></section>
 </main>
 
@@ -257,6 +257,10 @@ const STOPS = [
     skills: ['Robot vision', 'Project management', 'Customer training', 'Documentation'],
     media: [
       { type: 'youtube', id: 'uZw6w4DnSVA', caption: 'Liberty Reach — AI vision product demo' },
+      { type: 'image', src: 'media/liberty/sealer-robots.jpg', caption: 'Sealer Robots' },
+      { type: 'image', src: 'media/liberty/seams-sealed-e-coat-underbody.jpg', caption: 'Seams sealed e-coat underbody' },
+      { type: 'image', src: 'media/liberty/toyota-city-japan.jpg', caption: 'Toyota City Japan' },
+      { type: 'image', src: 'media/liberty/daihatsu-motors-japan.jpg', caption: 'Daihatsu Motors Japan' },
     ] },
   { short: 'Kawasaki', project: 'Converting the training catalog to an online format during the pandemic', theme: 'kawasaki', logo: 'kawasaki', plate: '#FFFFFF', plateInk: '#111111',  mark: 'KR', org: 'Kawasaki Robotics', role: 'Senior Trainer & Developer', years: 'Mar 2016 – Apr 2022', place: 'Wixom, Michigan', kind: 'Industry', photo: '', c1: '#5A4632', c2: '#241B12',
     did: 'Six years designing and teaching robot programming, simulation, and safety for major automotive customers.',
@@ -309,8 +313,8 @@ const cards = STOPS.map((s, i) => {
   b.setAttribute('aria-label', `${s.org}, ${s.role}`);
   b.innerHTML = `<div class="face" style="--c1:${s.c1};--c2:${s.c2}">${
     s.photo ? `<img src="${esc(s.photo)}" alt="" draggable="false">`
-    : s.logo ? `<div class="lc" style="--plate:${s.plate};--plate-ink:${s.plateInk}"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="logo"><img src="${LOGOS[s.logo]}" alt="" draggable="false"></span><span><span class="org">${esc(s.org)}</span><br><span class="yr">${esc(s.years)}</span></span></div>`
-            : `<div class="ph"><span class="pt">P[${i + 1}] · ${esc(s.kind)}</span><span class="mono">${esc(s.mark)}</span><span><span class="org">${esc(s.org)}</span><br><span class="add">photo goes here</span></span></div>`
+    : s.logo ? `<div class="lc" style="--plate:${s.plate};--plate-ink:${s.plateInk}"><span class="pt">${esc(s.kind)}</span><span class="logo"><img src="${LOGOS[s.logo]}" alt="" draggable="false"></span><span><span class="org">${esc(s.org)}</span><br><span class="yr">${esc(s.years)}</span></span></div>`
+            : `<div class="ph"><span class="pt">${esc(s.kind)}</span><span class="mono">${esc(s.mark)}</span><span><span class="org">${esc(s.org)}</span><br><span class="add">photo goes here</span></span></div>`
   }</div>`;
   b.addEventListener('click', e => { if (dragMoved) { e.preventDefault(); return; } go(i); });
   ring.appendChild(b); return b;
@@ -474,10 +478,15 @@ function renderMediaRail(s) {
     document.body.classList.remove('has-media');
     return;
   }
+  const hasVideo = items.some(m => m.type === 'youtube' || m.type === 'video');
+  const hasImage = items.some(m => m.type === 'image');
+  const label = hasVideo && hasImage ? 'Video & photos' : hasImage ? 'Photos' : 'Video';
+  const cue = hasVideo && hasImage ? 'Scroll down for video & photos' : hasImage ? 'Scroll down for photos' : 'Scroll down for video';
   document.body.classList.add('has-media');
   scrollCue.hidden = false;
+  scrollCue.textContent = cue;
   mediaRail.hidden = false;
-  mediaRail.innerHTML = `<div class="rail-k">Video</div>${items.map(mediaItemHtml).join('')}`;
+  mediaRail.innerHTML = `<div class="rail-k">${label}</div>${items.map(mediaItemHtml).join('')}`;
 }
 
 // ---------- controls ----------
