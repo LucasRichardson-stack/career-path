@@ -161,13 +161,11 @@ Run after any change:
 - Drag past both ends: rubber-bands back.
 - A long jump (stop 1 to 7) and mid-animation: dots stay under cards.
 
-## Next feature: media for each stop
+## Media for each stop (current approach)
 
-Goal: photos and short videos per stop (for example, a Kawasaki robot doing a welding application) without breaking the one-screen layout.
+Goal: photos and short videos per stop without a separate full-screen overlay — better for classroom present mode (laptop HDMI or room browser + F11).
 
-Proposed design:
-
-- New optional `STOPS` field:
+- Optional `STOPS` field:
   ```js
   media: [
     { type: 'youtube', id: 'uZw6w4DnSVA', caption: 'Liberty Reach — AI vision product demo' },
@@ -175,12 +173,12 @@ Proposed design:
     { type: 'image', src: 'media/kawasaki-team.jpg', caption: 'Training class in Wixom' },
   ]
   ```
-- Stops with media show a small "Media" chip in the panel.
-- Clicking the chip or pressing Down opens a full-screen viewer in the stop's theme colors. Left and Right step through items, Esc or Up closes and returns to the carousel.
-- `youtube` items embed `https://www.youtube.com/embed/<id>`. Local videos: `preload="metadata"`, play when shown, pause when leaving. Sound is allowed because opening the viewer counts as a user interaction.
-- The clicker keeps moving between stops. Media is opened deliberately with the chip or the Down key.
-- Not a scroll-down section: scrolling pushes the carousel off screen in front of the room.
+- Stops with media grow the page: a **scroll-down** `#media-rail` section under the stop panel shows responsive 16:9 embeds (YouTube) or local video/image. A “Scroll down for video” cue appears when media exists.
+- Switching stops scrolls back to the top so you don’t land mid-video on another company.
+- Left/Right, PageUp/PageDown, Space, and the clicker still change stops. Mouse/trackpad scroll moves within the stop (carousel ↔ video).
+- `youtube` items embed `https://www.youtube.com/embed/<id>` (lazy-loaded; needs network). Backdrop drawings stay `position: fixed` so they remain while scrolling.
 - Optional: a `photo` on the card instead of the logo plate (field already supported).
+- Older “Media chip → full-screen viewer” approach was removed in favor of this scroll pattern.
 
 Media prep:
 

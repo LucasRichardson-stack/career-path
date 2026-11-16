@@ -38,10 +38,10 @@
     --sans: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   }
-  html, body { height: 100%; background: var(--bg); color: var(--body); }
+  html, body { min-height: 100%; height: auto; background: var(--bg); color: var(--body); }
   html { transition: --bg .9s ease, --panel .9s ease, --line .9s ease, --text .9s ease, --body .9s ease, --muted .9s ease, --accent .9s ease, --accent-text .9s ease, --on-accent .9s ease, --eyebrow .9s ease; }
   body { font-family: var(--sans); font-size: 16px; line-height: 1.5; padding-inline: 16px; }
-  .app { max-width: 1280px; height: 100%; margin: 0 auto; padding-block: 18px; display: grid; grid-template-rows: auto minmax(260px, 1fr) auto auto auto; gap: 14px; }
+  .app { max-width: 1280px; min-height: 100vh; height: auto; margin: 0 auto; padding-block: 18px; display: grid; grid-template-rows: auto minmax(240px, 38vh) auto auto auto auto; gap: 14px; box-sizing: border-box; }
 
   /* Header */
   .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -135,60 +135,40 @@
   .advice li::before { content: counter(adv); font-family: var(--mono); font-size: 12px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); margin-top: 1px; }
 
 
-  .chip-media {
-    font-family: var(--mono); font-size: 11.5px; color: var(--on-accent);
-    background: var(--accent); border: 1px solid var(--accent); border-radius: 999px;
-    padding: 3px 12px; cursor: pointer; letter-spacing: .04em;
+  /* Scroll-down media: sits under the stop panel; page grows when a stop has media */
+  .media-rail {
+    max-width: 960px; width: 100%; margin: 8px auto 0; padding: 28px 0 56px;
+    border-top: 1px solid var(--line);
   }
-  .chip-media:hover { filter: brightness(1.08); }
-  .chip-media:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
-
-  .viewer {
-    position: fixed; inset: 0; z-index: 40; display: none;
-    flex-direction: column; background: var(--bg); color: var(--text);
-    padding: 18px 20px 16px; box-sizing: border-box;
+  .media-rail[hidden] { display: none !important; }
+  .media-rail .rail-k {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--eyebrow); margin: 0 0 10px;
   }
-  .viewer.open { display: flex; }
-  .viewer-top {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    flex-wrap: wrap; margin-bottom: 12px;
+  .media-item { margin-bottom: 28px; }
+  .media-item:last-child { margin-bottom: 0; }
+  .media-item .cap {
+    font-size: 15px; font-weight: 500; color: var(--text); margin: 0 0 10px; line-height: 1.35;
   }
-  .viewer-top .label { font-family: var(--mono); font-size: 12px; color: var(--eyebrow); letter-spacing: .08em; text-transform: uppercase; }
-  .viewer-top .cap { font-family: var(--sans); font-size: 15px; color: var(--text); font-weight: 500; }
-  .viewer-close {
-    font-family: var(--mono); font-size: 12px; color: var(--body);
-    background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
-    padding: 6px 12px; cursor: pointer;
+  .media-frame {
+    position: relative; width: 100%; aspect-ratio: 16 / 9;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
   }
-  .viewer-close:hover { border-color: var(--accent); color: var(--accent); }
-  .viewer-stage {
-    flex: 1; min-height: 0; display: grid; place-items: center;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
-    overflow: hidden; position: relative;
+  .media-frame iframe, .media-frame video, .media-frame img {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; object-fit: contain;
   }
-  .viewer-stage iframe, .viewer-stage video, .viewer-stage img {
-    width: min(100%, 1100px); height: min(100%, 70vh); max-height: 100%;
-    border: 0; background: #000; object-fit: contain;
+  .scroll-cue {
+    font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center;
+    margin-top: 4px;
   }
-  .viewer-stage iframe { aspect-ratio: 16 / 9; height: auto; max-height: min(70vh, 100%); width: min(100%, calc(min(70vh, 100%) * 16 / 9)); }
-  .viewer-nav {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    margin-top: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted);
-  }
-  .viewer-nav button {
-    font-family: var(--mono); font-size: 12px; color: var(--text);
-    background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
-    padding: 6px 12px; cursor: pointer;
-  }
-  .viewer-nav button:disabled { opacity: .35; cursor: default; }
-  .viewer-nav button:not(:disabled):hover { border-color: var(--accent); color: var(--accent); }
+  .scroll-cue[hidden] { display: none !important; }
   .hint { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; }
   kbd { font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; color: var(--body); }
 
   @media (max-width: 760px) {
     .bd-layer svg { left: -10%; max-width: 90%; height: 70%; }
     html, body { height: auto; }
-    .app { height: auto; grid-template-rows: auto 360px auto auto auto; }
+    .app { height: auto; min-height: 0; grid-template-rows: auto 360px auto auto auto auto; }
     .panel { grid-template-columns: 1fr; }
     .info { min-height: 440px; }
     .step .lbl { display: none; }
@@ -232,25 +212,11 @@
 
   <section class="info" id="info" aria-live="polite"></section>
 
-  <div class="hint">Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> or a clicker; <kbd>&#8595;</kbd> opens Media when available</div>
+  <div class="hint">Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> or a presentation clicker, or select any card or waypoint</div>
+  <div class="scroll-cue" id="scroll-cue" hidden>Scroll down for video</div>
+  <section class="media-rail" id="media-rail" hidden aria-label="Stop media"></section>
 </main>
 
-
-<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Stop media" hidden>
-  <div class="viewer-top">
-    <div>
-      <div class="label" id="viewer-label">Media</div>
-      <div class="cap" id="viewer-caption"></div>
-    </div>
-    <button type="button" class="viewer-close" id="viewer-close">Close · Esc</button>
-  </div>
-  <div class="viewer-stage" id="viewer-stage"></div>
-  <div class="viewer-nav">
-    <button type="button" id="viewer-prev" aria-label="Previous media">← Prev</button>
-    <span id="viewer-count"></span>
-    <button type="button" id="viewer-next" aria-label="Next media">Next →</button>
-  </div>
-</div>
 
 <script>
 /* =====================================================================
@@ -425,8 +391,8 @@ function go(i) {
   if (i !== active) setActive(i, i > active ? 1 : -1);
 }
 function setActive(i, dir) {
-  if (mediaOpen) closeViewer();
   const first = active === -1; active = i;
+  window.scrollTo(0, 0);
   const s = STOPS[i];
   const th = THEMES[s.theme] || THEMES.base, root = document.documentElement;
   Object.entries(th).forEach(([k, v]) => k === 'scheme' ? (root.style.colorScheme = v) : root.style.setProperty('--' + k, v));
@@ -451,7 +417,7 @@ function setActive(i, dir) {
     <div class="right">
       ${Array.isArray(s.did) ? `<ol class="advice">${s.did.map(t => `<li>${ph(t)}</li>`).join('')}</ol>` : `<p>${ph(s.did)}</p>`}
       <dl class="lesson"><dt>What it taught me</dt><dd>${ph(s.lesson)}</dd></dl>
-      <div class="chips">${s.skills.map(k => `<span class="chip">${ph(k)}</span>`).join('')}${s.media && s.media.length ? `<button type="button" class="chip-media" data-open-media>Media</button>` : ''}</div>
+      <div class="chips">${s.skills.map(k => `<span class="chip">${ph(k)}</span>`).join('')}</div>
     </div>`;
   info.style.setProperty('--dir', dir);
   info.querySelectorAll('.panel.anim-out').forEach(p => p.remove());
@@ -463,7 +429,7 @@ function setActive(i, dir) {
     panel.classList.add('anim-in');
   }
   info.appendChild(panel);
-  panel.querySelectorAll('[data-open-media]').forEach(btn => btn.addEventListener('click', () => openViewer(0)));
+  renderMediaRail(s);
   requestAnimationFrame(measure);
 }
 
@@ -478,93 +444,56 @@ function setBackdrop(key) {
 }
 
 
-// ---------- media viewer ----------
-let mediaOpen = false, mediaIdx = 0;
-const viewer = $('viewer'), viewerStage = $('viewer-stage'), viewerCap = $('viewer-caption');
-const viewerCount = $('viewer-count'), viewerPrev = $('viewer-prev'), viewerNext = $('viewer-next');
+// ---------- scroll-down media rail ----------
+const mediaRail = $('media-rail'), scrollCue = $('scroll-cue');
 
-function currentMedia() {
-  const s = STOPS[active];
-  return (s && s.media) || [];
+function youtubeId(item) {
+  return item.id || (item.src || '').replace(/^.*(?:v=|youtu\.be\/|embed\/)([^&?/]+).*$/, '$1');
 }
-function renderViewerItem() {
-  const items = currentMedia();
-  const item = items[mediaIdx];
-  if (!item) return;
-  viewerCap.textContent = item.caption || '';
-  viewerCount.textContent = items.length > 1 ? `${mediaIdx + 1} / ${items.length}` : '';
-  viewerPrev.disabled = mediaIdx <= 0;
-  viewerNext.disabled = mediaIdx >= items.length - 1;
-  $('viewer-label').textContent = STOPS[active].org + ' · Media';
-  // tear down previous media (pause video / clear iframe)
-  viewerStage.innerHTML = '';
+function mediaItemHtml(item) {
+  const cap = item.caption ? `<div class="cap">${ph(item.caption)}</div>` : '';
   if (item.type === 'youtube') {
-    const id = item.id || (item.src || '').replace(/^.*(?:v=|youtu\.be\/|embed\/)([^&?/]+).*$/, '$1');
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
-    iframe.title = item.caption || 'YouTube video';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    iframe.allowFullscreen = true;
-    viewerStage.appendChild(iframe);
-  } else if (item.type === 'video') {
-    const v = document.createElement('video');
-    v.src = item.src; v.controls = true; v.playsInline = true; v.preload = 'metadata';
-    if (item.poster) v.poster = item.poster;
-    viewerStage.appendChild(v);
-    v.play().catch(() => {});
-  } else if (item.type === 'image') {
-    const img = document.createElement('img');
-    img.src = item.src; img.alt = item.caption || '';
-    viewerStage.appendChild(img);
+    const id = youtubeId(item);
+    return `<article class="media-item">${cap}<div class="media-frame"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0" title="${esc(item.caption || 'YouTube video')}" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></article>`;
   }
+  if (item.type === 'video') {
+    const poster = item.poster ? ` poster="${esc(item.poster)}"` : '';
+    return `<article class="media-item">${cap}<div class="media-frame"><video src="${esc(item.src)}" controls playsinline preload="metadata"${poster}></video></div></article>`;
+  }
+  if (item.type === 'image') {
+    return `<article class="media-item">${cap}<div class="media-frame"><img src="${esc(item.src)}" alt="${esc(item.caption || '')}" loading="lazy"></div></article>`;
+  }
+  return '';
 }
-function openViewer(i = 0) {
-  const items = currentMedia();
-  if (!items.length) return;
-  mediaIdx = Math.max(0, Math.min(items.length - 1, i));
-  mediaOpen = true;
-  viewer.hidden = false;
-  viewer.classList.add('open');
-  renderViewerItem();
-  $('viewer-close').focus({ preventScroll: true });
+function renderMediaRail(s) {
+  const items = (s && s.media) || [];
+  if (!items.length) {
+    mediaRail.hidden = true;
+    mediaRail.innerHTML = '';
+    scrollCue.hidden = true;
+    document.body.classList.remove('has-media');
+    return;
+  }
+  document.body.classList.add('has-media');
+  scrollCue.hidden = false;
+  mediaRail.hidden = false;
+  mediaRail.innerHTML = `<div class="rail-k">Video</div>${items.map(mediaItemHtml).join('')}`;
 }
-function closeViewer() {
-  if (!mediaOpen) return;
-  mediaOpen = false;
-  viewer.classList.remove('open');
-  viewer.hidden = true;
-  viewerStage.innerHTML = '';
-}
-function stepViewer(delta) {
-  const items = currentMedia();
-  if (!items.length) return;
-  mediaIdx = Math.max(0, Math.min(items.length - 1, mediaIdx + delta));
-  renderViewerItem();
-}
-$('viewer-close').addEventListener('click', closeViewer);
-viewerPrev.addEventListener('click', () => stepViewer(-1));
-viewerNext.addEventListener('click', () => stepViewer(1));
 
 // ---------- controls ----------
 $('prev').addEventListener('click', () => go(active - 1));
 $('next').addEventListener('click', () => go(active + 1));
 document.addEventListener('keydown', e => {
-  if (e.target.closest('input, textarea')) return;
-  if (mediaOpen) {
-    if (e.key === 'Escape' || e.key === 'ArrowUp') { e.preventDefault(); closeViewer(); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); stepViewer(-1); }
-    else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); stepViewer(1); }
-    return;
-  }
-  const fwd = ['ArrowRight', 'PageDown', ' '], back = ['ArrowLeft', 'PageUp'];
-  if (e.key === 'ArrowDown') {
-    if (currentMedia().length) { e.preventDefault(); openViewer(0); }
-    return;
-  }
-  if (fwd.includes(e.key)) { e.preventDefault(); go(active + 1); }
-  else if (back.includes(e.key)) { e.preventDefault(); go(active - 1); }
-  else if (e.key === 'Home') go(0);
-  else if (e.key === 'End') go(N - 1);
+  if (e.target.closest('input, textarea, iframe')) return;
+  // Left/Right always change stops. PageUp/PageDown/Space (clickers) only when scrolled to top,
+  // so they don't fight wheel/trackpad scroll into the video rail.
+  const atTop = window.scrollY < 24;
+  if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1); }
+  else if (atTop && (e.key === 'PageDown' || e.key === ' ')) { e.preventDefault(); go(active + 1); }
+  else if (atTop && e.key === 'PageUp') { e.preventDefault(); go(active - 1); }
+  else if (e.key === 'Home') { e.preventDefault(); go(0); }
+  else if (e.key === 'End') { e.preventDefault(); go(N - 1); }
 });
 $('fs').addEventListener('click', async () => {
   try {
