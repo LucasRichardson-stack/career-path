@@ -157,6 +157,24 @@
   .media-frame iframe, .media-frame video, .media-frame img {
     position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; object-fit: contain;
   }
+  /* Condensed 2×2 photo gallery (Liberty, Peace Corps, shared) */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .photo-grid .media-item { margin-bottom: 0; }
+  .photo-grid .media-frame {
+    aspect-ratio: 4 / 3;
+    border-radius: 4px;
+  }
+  .photo-grid .cap {
+    font-size: 13px; font-weight: 500; color: var(--text);
+    margin: 8px 0 0; line-height: 1.3;
+  }
   .scroll-cue {
     font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center;
     margin-top: 4px;
@@ -173,6 +191,8 @@
     .info { min-height: 440px; }
     .step .lbl { display: none; }
     .fs { display: none; }
+    .photo-grid { gap: 12px; max-width: 100%; }
+    .photo-grid .cap { font-size: 12px; }
   }
   @media (max-height: 760px) and (min-width: 761px) {
     .panel h1 { font-size: clamp(30px, 4vw, 48px); }
@@ -459,7 +479,7 @@ const mediaRail = $('media-rail'), scrollCue = $('scroll-cue');
 function youtubeId(item) {
   return item.id || (item.src || '').replace(/^.*(?:v=|youtu\.be\/|embed\/)([^&?/]+).*$/, '$1');
 }
-function mediaItemHtml(item) {
+function mediaItemHtml(item, { captionBelow = false } = {}) {
   const cap = item.caption ? `<div class="cap">${ph(item.caption)}</div>` : '';
   if (item.type === 'youtube') {
     const id = youtubeId(item);
@@ -470,7 +490,8 @@ function mediaItemHtml(item) {
     return `<article class="media-item">${cap}<div class="media-frame"><video src="${esc(item.src)}" controls playsinline preload="metadata"${poster}></video></div></article>`;
   }
   if (item.type === 'image') {
-    return `<article class="media-item">${cap}<div class="media-frame"><img src="${esc(item.src)}" alt="${esc(item.caption || '')}" loading="lazy"></div></article>`;
+    const frame = `<div class="media-frame"><img src="${esc(item.src)}" alt="${esc(item.caption || '')}" loading="lazy"></div>`;
+    return `<article class="media-item">${captionBelow ? frame + cap : cap + frame}</article>`;
   }
   return '';
 }
@@ -483,15 +504,21 @@ function renderMediaRail(s) {
     document.body.classList.remove('has-media');
     return;
   }
-  const hasVideo = items.some(m => m.type === 'youtube' || m.type === 'video');
-  const hasImage = items.some(m => m.type === 'image');
+  const videos = items.filter(m => m.type === 'youtube' || m.type === 'video');
+  const images = items.filter(m => m.type === 'image');
+  const hasVideo = videos.length > 0;
+  const hasImage = images.length > 0;
   const label = hasVideo && hasImage ? 'Video & photos' : hasImage ? 'Photos' : 'Video';
   const cue = hasVideo && hasImage ? 'Scroll down for video & photos' : hasImage ? 'Scroll down for photos' : 'Scroll down for video';
+  const videoHtml = videos.map(m => mediaItemHtml(m)).join('');
+  const photoHtml = images.length
+    ? `<div class="photo-grid">${images.map(m => mediaItemHtml(m, { captionBelow: true })).join('')}</div>`
+    : '';
   document.body.classList.add('has-media');
   scrollCue.hidden = false;
   scrollCue.textContent = cue;
   mediaRail.hidden = false;
-  mediaRail.innerHTML = `<div class="rail-k">${label}</div>${items.map(mediaItemHtml).join('')}`;
+  mediaRail.innerHTML = `<div class="rail-k">${label}</div>${videoHtml}${photoHtml}`;
 }
 
 // ---------- controls ----------
