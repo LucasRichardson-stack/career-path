@@ -175,7 +175,7 @@
     font-size: 13px; font-weight: 500; color: var(--text);
     margin: 8px 0 0; line-height: 1.3;
   }
-  /* Peace Corps: 2 on top, third centered under the pair (triangle) */
+  /* Odd last row: solo photo centered under the pair above (Peace Corps triangle) */
   .photo-grid.photo-grid--triangle .media-item:last-child {
     grid-column: 1 / -1;
     width: calc(50% - 8px);
@@ -319,7 +319,7 @@ const STOPS = [
       { type: 'image', src: 'media/universal-robots/trainer-certification-workshop.jpg', caption: 'Trainer certification workshop' },
       { type: 'image', src: 'media/universal-robots/ur-academy-egr101.jpg', caption: 'Teacher Certification' },
     ] },
-  { short: 'M.S.', project: 'Brazil Immersion; Building a 1 year timeline for a local design firm to enter the US and UK markets.', theme: 'illinois', logo: 'illinois', plate: '#12294B', plateInk: '#FFFFFF',  mark: 'MS', org: 'University of Illinois Urbana-Champaign', heading: 'University of Illinois', role: 'M.S., Management', years: '[2023 – 2025]', place: 'Urbana-Champaign · [Online]', kind: 'Education', photo: '', c1: '#4A3458', c2: '#1E1526',
+  { short: 'M.S.', project: 'Brazil Immersion; Building a 1 year timeline for a local design firm to enter the US and UK markets.', theme: 'illinois', logo: 'illinois', plate: '#12294B', plateInk: '#FFFFFF',  mark: 'MS', org: 'University of Illinois Urbana-Champaign', heading: 'University of Illinois', role: 'M.S., Management', years: '2023 – 2025', place: 'Urbana-Champaign · Online', kind: 'Education', photo: '', c1: '#4A3458', c2: '#1E1526',
     did: 'Initially I signed up for an MBA, but pivoted after 2 years due to layoffs at UR and increased workload and concerns for job stability.',
     lesson: 'A bettter understanding of Data analysis and how it can be utilizized to gain resources, buy-in, and support.',
     skills: ['Operations', 'Strategy', 'Leading teams', 'Data Analytics'],
@@ -542,7 +542,8 @@ function renderMediaRail(s) {
   const label = hasVideo && hasImage ? 'Video & photos' : hasImage ? 'Photos' : 'Video';
   const cue = hasVideo && hasImage ? 'Scroll down for video & photos' : hasImage ? 'Scroll down for photos' : 'Scroll down for video';
   const videoHtml = videos.map(m => mediaItemHtml(m)).join('');
-  const triangle = s.theme === 'peacecorps' && images.length === 3;
+  // Reuse Peace Corps triangle whenever the last photo row would be a solo (odd count).
+  const triangle = images.length % 2 === 1;
   const photoHtml = images.length
     ? `<div class="photo-grid${triangle ? ' photo-grid--triangle' : ''}">${images.map(m => mediaItemHtml(m, { captionBelow: true })).join('')}</div>`
     : '';
