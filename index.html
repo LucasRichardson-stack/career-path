@@ -175,6 +175,12 @@
     font-size: 13px; font-weight: 500; color: var(--text);
     margin: 8px 0 0; line-height: 1.3;
   }
+  /* Peace Corps: 2 on top, third centered under the pair (triangle) */
+  .photo-grid.photo-grid--triangle .media-item:last-child {
+    grid-column: 1 / -1;
+    width: calc(50% - 8px);
+    justify-self: center;
+  }
   .scroll-cue {
     font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center;
     margin-top: 4px;
@@ -193,6 +199,9 @@
     .fs { display: none; }
     .photo-grid { gap: 12px; max-width: 100%; }
     .photo-grid .cap { font-size: 12px; }
+    .photo-grid.photo-grid--triangle .media-item:last-child {
+      width: calc(50% - 6px);
+    }
   }
   @media (max-height: 760px) and (min-width: 761px) {
     .panel h1 { font-size: clamp(30px, 4vw, 48px); }
@@ -295,7 +304,6 @@ const STOPS = [
       { type: 'youtube', id: 'F0pMc59iEqc', caption: 'Kawasaki Robotics — application demo' },
       { type: 'video', src: 'media/kawasaki/training-at-kawasaki.mp4', caption: 'Training at Kawasaki' },
       { type: 'image', src: 'media/kawasaki/kawasaki-duaro-training.jpg', caption: 'Hands-on technical training in the lab' },
-      { type: 'image', src: 'media/kawasaki/training-center-team.jpg', caption: 'Training center team' },
       { type: 'image', src: 'media/kawasaki/kawasaki-unimate.jpg', caption: 'Kawasaki Unimate' },
     ] },
   { short: 'Universal Robots', project: 'Building the training center in Boston', theme: 'ur', logo: 'ur', plate: '#FFFFFF', plateInk: '#0F2A3D',  mark: 'UR', org: 'Universal Robots', role: 'Regional Training Manager, North America', years: 'Apr 2022 – Oct 2025', place: 'Remote; Global; Novi, Michigan', kind: 'Industry', photo: '', c1: '#2F5560', c2: '#122328',
@@ -309,7 +317,7 @@ const STOPS = [
       { type: 'image', src: 'media/universal-robots/ur-old-hq-denmark.jpg', caption: 'UR old headquarters in Denmark' },
       { type: 'image', src: 'media/universal-robots/novi-meadows-at-macul.jpg', caption: 'Novi Meadows at MACUL' },
       { type: 'image', src: 'media/universal-robots/trainer-certification-workshop.jpg', caption: 'Trainer certification workshop' },
-      { type: 'image', src: 'media/universal-robots/ur-academy-egr101.jpg', caption: 'UR Academy — EGR101' },
+      { type: 'image', src: 'media/universal-robots/ur-academy-egr101.jpg', caption: 'Teacher Certification' },
     ] },
   { short: 'M.S.', project: 'Brazil Immersion; Building a 1 year timeline for a local design firm to enter the US and UK markets.', theme: 'illinois', logo: 'illinois', plate: '#12294B', plateInk: '#FFFFFF',  mark: 'MS', org: 'University of Illinois Urbana-Champaign', heading: 'University of Illinois', role: 'M.S., Management', years: '[2023 – 2025]', place: 'Urbana-Champaign · [Online]', kind: 'Education', photo: '', c1: '#4A3458', c2: '#1E1526',
     did: 'Initially I signed up for an MBA, but pivoted after 2 years due to layoffs at UR and increased workload and concerns for job stability.',
@@ -326,12 +334,13 @@ const STOPS = [
     skills: ['AI vision', 'Building a team', 'Onboarding', 'AI-assisted tools'],
     media: [
       { type: 'youtube', id: '_3B88oAPkg0', caption: 'Apera AI — product demo' },
-      { type: 'image', src: 'media/apera/vision-training-lab.jpg', caption: 'Vision training lab' },
-      { type: 'image', src: 'media/apera/team-in-the-apera-lab.jpg', caption: 'Team in the Apera lab' },
-      { type: 'image', src: 'media/apera/fanuc-crx-with-apera-vision.jpg', caption: 'FANUC CRX with Apera vision' },
+      { type: 'image', src: 'media/apera/vision-training-lab.jpg', caption: 'Temporary Training Facility' },
+      { type: 'image', src: 'media/apera/team-in-the-apera-lab.jpg', caption: 'Apera Center of Exelence Training Center' },
+      { type: 'image', src: 'media/apera/fanuc-crx-with-apera-vision.jpg', caption: 'Apera Training Cell' },
       { type: 'image', src: 'media/apera/apera-software-on-the-floor.jpg', caption: 'Apera software on the floor' },
-      { type: 'image', src: 'media/apera/apera-booth-physical-ai.jpg', caption: 'Apera booth — Physical AI' },
-      { type: 'image', src: 'media/apera/team-selfie.jpg', caption: 'Team selfie' },
+      { type: 'image', src: 'media/apera/apera-booth-physical-ai.jpg', caption: 'Apera Tradeshow booth' },
+      { type: 'image', src: 'media/apera/team-selfie.jpg', caption: 'First Apera Onboarding Cohort' },
+      { type: 'image', src: 'media/apera/ford-training-at-apera.jpg', caption: 'Ford Training At Apera' },
     ] },
   // did can be a list: each item shows on its own numbered line
   { short: 'Your turn', theme: 'kettering', logo: 'kettering', plate: '#FFFFFF', plateInk: '#1D4F9C',  mark: '?', org: 'Kettering University', role: 'Questions', years: 'Today', place: 'Flint, Michigan', kind: 'Q&A', photo: '', c1: '#7A5A1A', c2: '#2C200A',
@@ -533,8 +542,9 @@ function renderMediaRail(s) {
   const label = hasVideo && hasImage ? 'Video & photos' : hasImage ? 'Photos' : 'Video';
   const cue = hasVideo && hasImage ? 'Scroll down for video & photos' : hasImage ? 'Scroll down for photos' : 'Scroll down for video';
   const videoHtml = videos.map(m => mediaItemHtml(m)).join('');
+  const triangle = s.theme === 'peacecorps' && images.length === 3;
   const photoHtml = images.length
-    ? `<div class="photo-grid">${images.map(m => mediaItemHtml(m, { captionBelow: true })).join('')}</div>`
+    ? `<div class="photo-grid${triangle ? ' photo-grid--triangle' : ''}">${images.map(m => mediaItemHtml(m, { captionBelow: true })).join('')}</div>`
     : '';
   document.body.classList.add('has-media');
   scrollCue.hidden = false;
